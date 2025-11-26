@@ -1,0 +1,10 @@
+Summary of Exploratory Analysis (Synthetic Customer Transaction Data)
+
+This project generates a synthetic dataset of 500 customer transactions with fields:
+TransactionID, CustomerSegment, PurchaseAmount, and TransactionDate.
+
+Descriptive statistics such as mean, median, and standard deviation were calculated for each segment (A, B, C).
+Patterns observed:
+- Segment averages differ slightly due to random distribution.
+- Purchase amounts follow a normal distribution.
+- Visualizations show typical bell-curve distribution and clear segment-wise averages.
