@@ -1,38 +1,35 @@
-import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 
-# Generate dataset
 np.random.seed(42)
 n = 500
+start_date = datetime(2024,1,1)
+
 data = pd.DataFrame({
     "TransactionID": range(1, n+1),
     "CustomerSegment": np.random.choice(['A','B','C'], n),
-    "PurchaseAmount": np.random.normal(200, 50, n).round(2),
-    "TransactionDate": [
-        (datetime.now() - timedelta(days=np.random.randint(0, 365))).strftime("%Y-%m-%d")
-        for _ in range(n)
-    ]
+    "PurchaseAmount": np.round(np.random.gamma(shape=5, scale=40, size=n), 2),
+    "TransactionDate": [start_date + timedelta(days=int(x)) for x in np.random.randint(0,365,n)]
 })
 
-# Display first rows
+print(data.info())
 print(data.head())
 
-# Descriptive stats
-stats = data.groupby("CustomerSegment")["PurchaseAmount"].describe()
+stats = data.groupby("CustomerSegment")["PurchaseAmount"].agg(["mean","median","std"])
 print(stats)
 
-# Visualizations
 plt.hist(data["PurchaseAmount"])
-plt.title("Distribution of Purchase Amounts")
-plt.xlabel("Amount")
+plt.title("Histogram of Purchase Amount")
+plt.xlabel("Purchase Amount")
 plt.ylabel("Frequency")
-plt.show()
+plt.savefig("hist.png")
+plt.clf()
 
-avg = data.groupby("CustomerSegment")["PurchaseAmount"].mean()
-avg.plot(kind='bar')
-plt.title("Average Purchase Amount by Customer Segment")
-plt.xlabel("Segment")
-plt.ylabel("Average Amount")
-plt.show()
+stats.plot(kind="bar")
+plt.title("Purchase Amount Stats by Segment")
+plt.xlabel("Customer Segment")
+plt.ylabel("Values")
+plt.savefig("bar.png")
+plt.clf()
